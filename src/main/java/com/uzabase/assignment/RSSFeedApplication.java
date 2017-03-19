@@ -29,13 +29,17 @@ public class RSSFeedApplication {
     @Value("${word.to.exclude}")
     private String wordToExclude;
 
-    public static void main(String[] args){
-        ConfigurableApplicationContext ctx = SpringApplication.run(RSSFeedApplication.class, args);
-        RSSFeedApplication rss = ctx.getBean(RSSFeedApplication.class);
-        rss.convertAndPrintFeed();
+    public static void main(String[] args) {
+        try {
+            ConfigurableApplicationContext ctx = SpringApplication.run(RSSFeedApplication.class, args);
+            RSSFeedApplication rss = ctx.getBean(RSSFeedApplication.class);
+            rss.convertAndPrintFeed();
+        } catch (Exception exception) {
+            System.err.print("Exception occurred " + exception.getMessage());
+        }
     }
 
-    private void convertAndPrintFeed(){
+    private void convertAndPrintFeed() {
         Optional<String> feed = feedReaderService.fetchFeed();
         feed.ifPresent(feedValue -> feedOutputter.outputFeed(feedConverter.convertFeed(feedValue, wordToExclude)));
     }
