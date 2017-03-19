@@ -12,4 +12,5 @@
 hs_err_pid*
 .idea
 JarName.iml
-RSSFeed.iml
+RSSFeedConverter.iml
+RSSFeedFileConverter.iml
