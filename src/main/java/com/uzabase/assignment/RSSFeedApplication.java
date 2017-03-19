@@ -24,7 +24,11 @@ public class RSSFeedApplication {
 
     @Autowired
     @Qualifier("standardFeedOutputter")
-    private FeedOutputter feedOutputter;
+    private FeedOutputter standardFeedOutputter;
+
+    @Autowired
+    @Qualifier("FileFeedOutputter")
+    private FeedOutputter fileFeedOutputter;
 
     @Value("${word.to.exclude}")
     private String wordToExclude;
@@ -41,6 +45,10 @@ public class RSSFeedApplication {
 
     private void convertAndPrintFeed() {
         Optional<String> feed = feedReaderService.fetchFeed();
-        feed.ifPresent(feedValue -> feedOutputter.outputFeed(feedConverter.convertFeed(feedValue, wordToExclude)));
+        feed.ifPresent(feedValue -> {
+            String feedToOutput = feedConverter.convertFeed(feedValue, wordToExclude);
+            standardFeedOutputter.outputFeed(feedToOutput);
+            fileFeedOutputter.outputFeed(feedToOutput);
+        });
     }
 }
